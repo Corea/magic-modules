@@ -1,6 +1,9 @@
 name: Build and Unit Test GA Provider
 
-permissions: read-all
+permissions:
+  checks: write
+  contents: read
+  statuses: write
 
 on:
   workflow_dispatch:
