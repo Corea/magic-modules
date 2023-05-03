@@ -16,9 +16,12 @@ on:
       branch:
         description: 'The branch or sha to execute against'
         required: true
+      sha:
+        description: "The commit to post the check result to"
+        required: true
 
 jobs:
-  build-and-test:
+  build-and-unit-test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -44,6 +47,17 @@ jobs:
       run: |
         cd provider
         make test
+      id: test
       if: ${{ always() }} # This step will always run, even if the previous fails
-
-
+    - uses: LouisBrunner/checks-action@v1.3.1
+      if: always()
+      with:
+        sha: ${{ github.event.inputs.sha }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        # token: ${{ github.token }}
+        name: Second Job
+        conclusion: ${{ job.status }}
+        details_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        output: |
+          {"summary":"${{ steps.test.outputs.summary }}"}
+        output_text_description_file: code-coverage-results.md
