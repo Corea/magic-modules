@@ -60,4 +60,3 @@ jobs:
         details_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         output: |
           {"summary":"${{ steps.test.outputs.summary }}"}
-        output_text_description_file: code-coverage-results.md
